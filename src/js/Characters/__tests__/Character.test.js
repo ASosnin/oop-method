@@ -1,8 +1,11 @@
-import { Character } from '../Character';
+import {Character} from "../Character";
+import {Bowman} from "../Bowman";
+import {Swordsman} from "../Swordsman";
+
 
 test('Валидация имени персонажа меньше 2 символов', () => {
   function createCharacter() {
-    return new Character('A', 'Character');
+    return new Bowman('A');
   }
 
   expect(createCharacter).toThrowError('name должна быть в диапазоне от 2 до 10 символов');
@@ -10,32 +13,32 @@ test('Валидация имени персонажа меньше 2 симво
 
 test('Валидация имени персонажа больше 10 символов', () => {
   function createCharacter() {
-    return new Character('Очень длинное имя персонажа', 'Character');
+    return new Bowman('Очень длинное имя персонажа');
   }
 
   expect(createCharacter).toThrowError('name должна быть в диапазоне от 2 до 10 символов');
 });
 
-test('Создание персонажа', () => {
-  const persona = new Character('Some Name', 'Character');
-  const expected = {
-    name: 'Some Name', type: 'Character', health: 100, level: 1, attack: 0, defence: 0,
-  };
-  expect(persona).toEqual(expected);
+test('Создание персонажа базового класса', () => {
+  function createCharacter() {
+    return new Character('Some Name', 'Character');
+  }
+
+  expect(createCharacter).toThrowError('Абстрактный класс не может быть создан');
 });
 
 test('Повышение уровня персонажа', () => {
-  const persona = new Character('Some Name', 'Character');
+  const persona = new Bowman('Some Name');
   persona.levelUp();
   const expected = {
-    name: 'Some Name', type: 'Character', health: 100, level: 2, attack: 0, defence: 0,
+    name: 'Some Name', type: 'Bowman', health: 100, level: 2, attack: 30, defence: 30,
   };
   expect(persona).toEqual(expected);
 });
 
 test('Повышение уровня мёртвого персонажа', () => {
-  const persona = new Character('Some Name', 'Character');
-  persona.damage(100);
+  const persona = new Bowman('Some Name');
+  persona.damage(1000);
 
   expect(() => {
     persona.levelUp();
@@ -43,20 +46,21 @@ test('Повышение уровня мёртвого персонажа', () =
 });
 
 test('Проверка нанесения урона по живому персонажу', () => {
-  const persona = new Character('Some Name', 'Character');
+  const persona = new Bowman('Some Name');
   persona.damage(50);
   const expected = {
-    name: 'Some Name', type: 'Character', health: 50, level: 1, attack: 0, defence: 0,
+    name: 'Some Name', type: 'Bowman', health: 62.5, level: 1, attack: 25, defence: 25,
   };
   expect(persona).toEqual(expected);
 });
 
-test('Проверка нанесения урона по мёртвому персонажу', () => {
-  const persona = new Character('Some Name', 'Character');
-  persona.damage(150);
-  persona.damage(150);
+test('Проверка нанесения урона по мёртвому Bowman', () => {
+  const persona = new Bowman('Some Name');
+  persona.health = -1;
+  persona.damage(10);
   const expected = {
-    name: 'Some Name', type: 'Character', health: -50, level: 1, attack: 0, defence: 0,
+    name: 'Some Name', type: 'Bowman', health: -1, level: 1, attack: 25, defence: 25,
   };
   expect(persona).toEqual(expected);
 });
+
