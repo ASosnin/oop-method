@@ -1,7 +1,5 @@
-import {Character} from "../Character";
-import {Bowman} from "../Bowman";
-import {Swordsman} from "../Swordsman";
-
+import { Character } from '../Character';
+import { Bowman } from '../Bowman';
 
 test('Валидация имени персонажа меньше 2 символов', () => {
   function createCharacter() {
@@ -63,4 +61,3 @@ test('Проверка нанесения урона по мёртвому Bowma
   };
   expect(persona).toEqual(expected);
 });
-
